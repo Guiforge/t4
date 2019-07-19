@@ -1,0 +1,6 @@
+[submodule "t4_front"]
+	path = t4_front
+	url = git@github.com:Guiforge/t4_front.git
+[submodule "t4_server"]
+	path = t4_server
+	url = git@github.com:Guiforge/t4_server
