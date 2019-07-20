@@ -2,12 +2,12 @@ version: '3'
 
 services:
   t4_front:
-    container_name: t4_front
     build:
       context: ./t4_front/
       dockerfile: dev.Dockerfile
+    ports:
+      - '8080:80'
     volumes:
       - './t4_front:/t4_front'
-    ports:
-      - '8080:8080'
+
 
