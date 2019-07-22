@@ -1,13 +1,39 @@
 version: '3'
 
 services:
-  t4_front:
+  # t4_front:
+  #   build:
+  #     context: ./t4_front/
+  #     dockerfile: dev.Dockerfile
+  #   ports:
+  #     - '8080:80'
+  #   volumes:
+  #     - './t4_front:/t4_front'
+  t4_server:
     build:
-      context: ./t4_front/
+      context: ./t4_server/
       dockerfile: dev.Dockerfile
-    ports:
-      - '8080:80'
     volumes:
-      - './t4_front:/t4_front'
+      - './t4_server:/t4_server'
+    ports:
+      - '8070:8070'
+    links:
+      - mongo
+    networks: 
+      - netDb
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    # volumes:
+      # - ./data/dev:/data/db
+    networks: 
+      - netDb
+networks:
+  netDb:
+    driver: "bridge"
 
 
