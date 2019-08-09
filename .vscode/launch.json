@@ -5,6 +5,17 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"type": "chrome",
+			"request": "launch",
+			"name": "vuejs: chrome",
+			"url": "http://localhost:8080",
+			"webRoot": "${workspaceFolder}/t4_front/src",
+			"breakOnLoad": true,
+			"sourceMapPathOverrides": {
+			  "webpack:///./src/*": "${webRoot}/*"
+			},
+		},
+		{
 			"type": "node",
 			"request": "launch",
 			"name": "Launch server",

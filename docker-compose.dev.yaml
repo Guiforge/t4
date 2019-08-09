@@ -6,7 +6,7 @@ services:
   #     context: ./t4_front/
   #     dockerfile: dev.Dockerfile
   #   ports:
-  #     - '8080:80'
+  #     - '8080:8080'
   #   volumes:
   #     - './t4_front:/t4_front'
   t4_server:
