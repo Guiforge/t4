@@ -17,6 +17,7 @@ services:
       - './t4_server:/t4_server'
     ports:
       - '8070:8070'
+      - '9229:9229'
     links:
       - mongo
     networks: 
