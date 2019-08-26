@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"name": "t4_server",
+			"path": "t4_server"
+		},
+		{
+			"name": "t4_front",
+			"path": "t4_front"
+		},
+		{
+			"name": "t4",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.autoSave": "onFocusChange"
+	}
+}

@@ -17,7 +17,6 @@ services:
       - './t4_server:/t4_server'
     ports:
       - '8070:8070'
-      - '9229:9229'
     links:
       - mongo
     networks: 
@@ -33,8 +32,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: toor
-    volumes:
-      - .Mongo/data/dev:/data/db
+    # volumes:
+      # - .Mongo/data/dev:/data/db
     networks: 
       - netDb
     # command: mongod

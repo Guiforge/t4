@@ -1,0 +1,17 @@
+- cookie signNonce
+- WebStream
+    - Big File
+- docker
+- https:
+    - client
+    - server: req.secure
+
+
+
+    -----------------------------
+Upload:
+POST meta
+    -> return Id + owner Token
+zipStream(encStream(requestStream)) // use meat data and stream perc
+    -> done
+    -> block reupload file
