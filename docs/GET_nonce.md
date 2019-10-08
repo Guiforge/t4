@@ -29,7 +29,7 @@ Do not supply a request body with this method.
 ### Request
 
 ```bash
-#localhost:8070/meta/5d9b4b7867abf700104ecadf
+#localhost:8070/nonce/5d9b4b7867abf700104ecadf
 curl -v -X 'GET' localhost:8070/nonce/5d9b4b7867abf700104ecadf
 ```
 

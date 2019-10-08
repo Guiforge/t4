@@ -38,7 +38,7 @@ Do not supply a request body with this method.
 ### Request
 
 ```bash
-#localhost:8070/meta/5d9b4b7867abf700104ecadf
+#localhost:8070/download/5d9b4b7867abf700104ecadf
 #signNonce: eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6WzEyNCw1MSwzMyw4OSwxODYsMTU0LDE2NSwxNDYsOTksMTYsMjM3LDE2NCwxMjcsNDEsMTc1LDE3MCwxNjgsMTk3LDExMiwxMjAsOTAsMTk0LDIzNCwyMzYsNDQsOTIsMjIwLDE3NSwyMzcsNTQsODcsOTddfQ==
 curl -X 'GET' --header "signNonce: eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6WzEyNCw1MSwzMyw4OSwxODYsMTU0LDE2NSwxNDYsOTksMTYsMjM3LDE2NCwxMjcsNDEsMTc1LDE3MCwxNjgsMTk3LDExMiwxMjAsOTAsMTk0LDIzNCwyMzYsNDQsOTIsMjIwLDE3NSwyMzcsNTQsODcsOTddfQ==" localhost:8070/download/5d9b4b7867abf700104ecadf
 ```
