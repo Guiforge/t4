@@ -13,7 +13,7 @@ const ExampleMeta = {
 	"ivMeta": Buffer.from([5, 113, 249, 81, 29, 233, 74, 221, 46, 75, 211, 42, 86, 154, 136, 162, 177, 154, 162, 200, 115, 188, 186, 230, 221, 135, 125, 147, 169, 112, 71, 180, 88, 202, 250, 124, 138, 139, 121, 190, 51, 48, 58, 35, 166, 203, 164, 131, 125, 92, 217, 193, 35, 149, 187, 49, 39, 38, 237, 92, 104, 43, 95, 219, 47, 173, 32, 188, 189, 164, 18, 127, 127, 35, 147, 44, 59, 205, 148, 47, 83, 108, 131, 122, 62, 160, 68, 171, 104, 41, 94, 27, 222, 250, 98, 140, 44, 71, 46, 136, 87, 23, 116, 89, 6, 109, 135, 195, 113, 14, 234, 40, 63, 95, 210, 210, 233, 77, 73, 133, 75, 188, 65, 190, 248, 191, 57, 110]),
 	"keyAuth": Buffer.from([125, 142, 154, 220, 226, 87, 69, 196, 63, 99, 206, 244, 220, 64, 133, 216, 243, 190, 70, 47, 233, 8, 186, 25, 209, 178, 115, 76, 121, 31, 100, 141, 182, 26, 110, 128, 115, 118, 210, 73, 146, 112, 226, 151, 209, 26, 20, 200, 109, 49, 210, 35, 67, 115, 148, 219, 254, 231, 31, 169, 171, 17, 120, 140]),
 	"days": 1,
-	"down": 1,
+	"down": 2,
 	"owner": "25f5f29e64af1e8d457e3397dd6f8b60e0cee1200aeaf6d4029ac8fe0c3bc98a0406f79a9ad8620773a3a50f705e63449e1504a4cdee8d88e58f8a0f8ec7fad7f2843bcc04e70a1a0edde9b2bc554d340eddb612a5c74e25c1fa2f673536775c7a70530baacb22b736b496bc54ae9d75c5773b842071f414151e707f6665ef87465af84f6cbc5b752eca1ce03190a1ee093a650bcfbdf65e9fec698b2258fddf5b786eab33d5323d6c48b06d38db085cb29ab940b669ed6b0590c2ace3d1213cd5fc598acbd70046becac2cf0c782efb421a49900426ad252351e05963ed04f16aa736785788d3a0f0b06c9649ae56297bd3cbef3a5497adb8d58d628b1c1dba",
 }
 
@@ -29,9 +29,9 @@ async function test(url, expected, method, headers) {
 			if (error) {
 				reject(error)
 			} else if (expected.body && expected.body !== body) {
-				reject({ desc:'not good Body', code: response.statusCode, body })
+				reject({ url, desc:'not good Body', code: response.statusCode, body, expected })
 			} else if (response && expected.code && response.statusCode !== expected.code) {
-				reject({ desc:'not good response code', code: response.statusCode, body })
+				reject({ url, desc:'not good response code', code: response.statusCode, body, expected })
 			} else {
 				resolve(body)
 			}
@@ -163,7 +163,8 @@ async function testUploadAuthTagError() {
 	})
 }
 
-async function testUpload() {
+async function testUpload(metaParam) {
+	const metaUse = metaParam || ExampleMeta
 	return new Promise((resolve, reject) => {
 		let socket = io(`${URL_API}`, {
 			reconnection: true,
@@ -195,7 +196,7 @@ async function testUpload() {
 			upload = true;
 		})
 
-		socket.emit('meta', ExampleMeta)
+		socket.emit('meta', metaUse)
 		let time = setTimeout(() => {
 			socket.disconnect()
 			reject('Error');
@@ -293,8 +294,134 @@ async function test401() {
 	})
 }
 
-		//info, nonce, getMeta, delete, download
+async function testComplet() {
+	const IDFile = await testUpload()
+	const nonce = await testNonceOK(IDFile)
+	const proms = [];
+	const hmac = crypto.createHmac('sha256', ExampleMeta.keyAuth);
+	hmac.write(JSON.parse(nonce).nonce);
+	hmac.end();
+	let signNonce = hmac.read();
 
+	signNonce = Buffer.from(JSON.stringify(signNonce)).toString('base64')
+
+	//info
+	await test(URL_API+'/info/' + IDFile, {code: 200}, "GET", {'owner': ExampleMeta.owner})
+
+	//meta
+	await test(URL_API+'/meta/' + IDFile, {code: 200}, "GET", {'signNonce': signNonce})
+
+	//download
+	await test(URL_API+'/download/' + IDFile, {code: 200}, "GET", {'signNonce': signNonce})
+
+	// /file/delete
+	await test(URL_API+'/file/delete/' + IDFile, {code: 404}, "GET", {'owner': ExampleMeta.owner})
+	await test(URL_API+'/file/delete/' + IDFile, {code: 200}, "DELETE", {'owner': ExampleMeta.owner})
+
+	return new Promise((resolve, reject) => {
+		try {
+
+			// Normally the file is delete
+
+			//info
+			proms.push(test(URL_API+'/info/' + IDFile, {code: 404}, "GET", {'owner': ExampleMeta.owner}))
+
+			//meta
+			proms.push(test(URL_API+'/meta/' + IDFile, {code: 404}, "GET", {'signNonce': signNonce}))
+
+			//download
+			proms.push(test(URL_API+'/download/' + IDFile, {code: 404}, "GET", {'signNonce': signNonce}))
+
+			Promise.all(proms).then(() => {resolve()}).catch((e) => {reject(e)})
+		} catch (error) {
+			reject(error)
+		}
+	})
+}
+
+async function testExpire() {
+	const IDFile = await testUpload()
+	const nonce = await testNonceOK(IDFile)
+	const proms = [];
+	const hmac = crypto.createHmac('sha256', ExampleMeta.keyAuth);
+	hmac.write(JSON.parse(nonce).nonce);
+	hmac.end();
+	let signNonce = hmac.read();
+
+	signNonce = Buffer.from(JSON.stringify(signNonce)).toString('base64')
+
+
+	//download
+	await test(URL_API+'/download/' + IDFile, {code: 200}, "GET", {'signNonce': signNonce})
+	await test(URL_API+'/download/' + IDFile, {code: 200}, "GET", {'signNonce': signNonce})
+	await test(URL_API+'/download/' + IDFile, {code: 404}, "GET", {'signNonce': signNonce})
+
+	return new Promise((resolve, reject) => {
+		try {
+
+			// Normally the file is delete
+
+			//info
+			proms.push(test(URL_API+'/info/' + IDFile, {code: 404}, "GET", {'owner': ExampleMeta.owner}))
+
+			//meta
+			proms.push(test(URL_API+'/meta/' + IDFile, {code: 404}, "GET", {'signNonce': signNonce}))
+
+			//download
+			proms.push(test(URL_API+'/download/' + IDFile, {code: 404}, "GET", {'signNonce': signNonce}))
+
+			Promise.all(proms).then(() => {resolve()}).catch((e) => {reject(e)})
+		} catch (error) {
+			reject(error)
+		}
+	})
+}
+
+async function testValueMetaError() {
+	async function _testErrorUploadMeta(metaParam) {
+		return new Promise((resolve, reject) => {
+			testUpload(metaParam).then(() => {
+				reject(metaParam)
+			})
+			.catch(() => {
+				resolve();
+			})
+		})
+
+	}
+		let metaTest = JSON.parse(JSON.stringify(ExampleMeta))
+		const proms = []
+		metaTest.days = -42
+		proms.push(_testErrorUploadMeta(metaTest))
+
+		metaTest.days = 11
+		proms.push(_testErrorUploadMeta(metaTest))
+
+		metaTest.days = []
+		proms.push(_testErrorUploadMeta(metaTest))
+
+		metaTest = JSON.parse(JSON.stringify(ExampleMeta))
+		metaTest.owner = ''
+		proms.push(_testErrorUploadMeta(metaTest))
+
+		metaTest = JSON.parse(JSON.stringify(ExampleMeta))
+		metaTest.enc = '42'
+		proms.push(_testErrorUploadMeta(metaTest))
+
+		metaTest = JSON.parse(JSON.stringify(ExampleMeta))
+		metaTest.ivMeta = {42: 'ecole'}
+		proms.push(_testErrorUploadMeta(metaTest))
+
+		metaTest = JSON.parse(JSON.stringify(ExampleMeta))
+		metaTest.keyAuth = {42: 'ecole'}
+		proms.push(_testErrorUploadMeta(metaTest))
+
+
+		metaTest = JSON.parse(JSON.stringify(ExampleMeta))
+		metaTest.down = 10001
+		proms.push(_testErrorUploadMeta(metaTest))
+		return Promise.all(proms)
+} 
 
 Tests = [
 	testUploadFoo,
@@ -305,7 +432,10 @@ Tests = [
 	testUpload,
 	test404,
 	test401,
-	testNonceOK
+	testNonceOK,
+	testComplet,
+	testExpire,
+	testValueMetaError
 ]
 const proms = []
 Tests.forEach(elem => {
