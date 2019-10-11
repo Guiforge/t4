@@ -1,0 +1,15 @@
+{
+  "name": "tester",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Guillaume Pouyat <guiforge@gmail.com>",
+  "scripts": {
+    "test": " node tester.js",
+    "debug": "env DEBUG=1 node tester.js"
+  },
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "request": "^2.88.0",
+    "socket.io": "^2.3.0"
+  }
+}
