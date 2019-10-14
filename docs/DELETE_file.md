@@ -1,10 +1,10 @@
 # DELETE file
 
-Delete file
+Delete file  
 
 ## Prerequisites
 
-- Know owner tag
+- Know owner tag  
 
 ## HTTP Request
 
@@ -14,21 +14,21 @@ Delete file
 
 ## Request parameters
 
-In the request URL, provide the following query parameters with values.
+In the request URL, provide the following query parameters with values.  
 
-| Parameter | Type | Description |
-|:----------|:-----|:------------|
-| Id Of File | string| the parameter is include to url (no need for: '?')|
+| Parameter | Type | Description |  
+|:----------|:-----|:------------|  
+| Id Of File | string| the parameter is include to url (no need for: '?')|  
 
 ## Optional request headers
 
-| Name | Value |
-|:-----|:------|
-|owner| The value of signNonce Buffer encode in bas64 |
+| Name | Value |  
+|:-----|:------|  
+|owner| The value of signNonce Buffer encode in bas64 |  
 
 ## Request body
 
-Do not supply a request body with this method.
+Do not supply a request body with this method.  
 
 ## Example
 
@@ -73,5 +73,5 @@ Unauthorized
 
 ## Remarks
 
-**Only if you have owner tag !**
-***the owner tag can't decrypt file or meta***
+**Only if you have owner tag !**  
+***the owner tag can't decrypt file or meta***  
