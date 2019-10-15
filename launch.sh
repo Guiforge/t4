@@ -16,7 +16,7 @@ poc() {
     echo 'Before you should create VM with docker-machine'
     echo 'Launch Server'
     echo "VM use: $1"
-    docker-machine start $1 ; eval $(docker-machine env t4)
+    docker-machine start $1;eval $(docker-machine env $1);
     docker-compose -f docker-compose.dev.yaml stop # stop
     docker-compose -f docker-compose.dev.yaml up -d # up service back
 

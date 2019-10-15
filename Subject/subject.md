@@ -67,7 +67,7 @@ We need a file transfer platform wich:
 > When the download link expires or the number of downloads is 0, the file is removed from the server  
 
 8. If there is a problem with the transfer (corruption of the file's content), the platform must control the file's integrity (client side)  
-> If corruption is detected, the client cancels the ongoing download and shows an error message  
+> If corruption is detected, the client app cancels the ongoing download and shows an error message  
 ![error notification](./images/corrupt.png)  
 
 9. The owner* can view his file(s). For each file, show number of downloads left and link's expiry date  
