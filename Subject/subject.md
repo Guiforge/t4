@@ -1,6 +1,9 @@
 # Super file(s) transfert !!  
 ## Web project / Crypto  
   
+> by gpouyat 🛸👓
+
+
 ### Summary:
 Are you are lost ? It's not a big subject.
 _____
@@ -21,7 +24,7 @@ Yes, indeed we don't want to lose confidential document"
 **You**: "- So, how do we exchange file(s) with your clients? How do you transfer my work contract ? How can I send files to co-workers ?"  
 
 **BOSS**: - "Very good questions! I hired you to answer these questions!"  
-
+___
 
 
 ## Instructions  

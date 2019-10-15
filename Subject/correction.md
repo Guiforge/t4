@@ -8,16 +8,19 @@
 
 ## Corrections:
 
-If any of these points are not true the correction stops
-Name | Description / question
------------- | ------------- 
-Server| must not be able to access of file and fileNames 
-Client | encryption and decryption is done only on the client.  
-Spy | The content of the file must not be accessible even if a spy sees all the exchanges with the server. or if the server is hacked and all these data are stolen. 
+If any of these points are not true the correction stops  
+
+
+
+Name         | Description / question  
+------------ | -------------  
+Server       | must not be able to access of file and fileNames  
+Client       | encryption and decryption is done only on the client.  
+Spy          | The content of the file must not be accessible even if a spy sees all the exchanges with the server. or if the server is hacked and all these data are stolen.  
 
 > When the site is in production, your very nice **Boss** will give you an SSL certificate.  So all your exchanges will be in HTTPS. For convenience, the project does not need to set the https.  
 
-Name | Description / question | number of perc
+Name | Description / question | number of perc  
 ------------ | ------------- | -------------
 Navigator    | Can we access with the web navigator   ? | 4
 Server don't access | Is it possible for the server to access the files ? (the secret key should not be stored on the server or accessible in logs). the expected answer is no | 10
