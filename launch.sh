@@ -42,7 +42,7 @@ tester() {
 
 echo 'launch:'
 echo 'for launch POC: ./launch poc <NAME OF VM>'
-echo 'for launch tests: ./launch test <NAME OF VM> [DEBUG]'
+echo 'for launch tests: ./launch test <NAME OF VM> [DEBUG?]'
 echo -e "\t Example poc: ./launch poc t4"
 echo -e "\t Example tests: ./launch test t4 "
 echo -e "\t Example tests with debug: ./launch test t4 1 "
