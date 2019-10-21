@@ -3,7 +3,7 @@
 
 **You**: - "I finish the plateform!!"  
 
-**New BOOS**:  - "Super, let's see it !"  
+**New BOSS**:  - "Super, let's see it !"  
 
 
 ## Corrections:

@@ -5,7 +5,7 @@
 
 
 ### Summary:
-Are you are lost ? It's not a big subject.
+Are you lost ? It's not a big subject.
 _____
 
 
